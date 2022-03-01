@@ -119,4 +119,5 @@ clean(Clauses, Length) :-
 
 subdir(Dir, File, Rel) :-
     relative_file_name(File, Dir, Rel),
+    print_message(informational, debug(Dir, File, Rel)),
     \+ sub_atom(Rel, 0, _, _, (..)).
