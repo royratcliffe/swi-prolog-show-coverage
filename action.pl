@@ -1,3 +1,3 @@
 :- initialization(main, main).
 
-main :- true.
+main :- show_coverage(run_tests).
