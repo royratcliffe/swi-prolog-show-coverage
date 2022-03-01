@@ -56,18 +56,20 @@ load_pack(Pack) :-
     load_test_files([]).
 
 %!  cover(Covers) is det.
-%!  cover(Goal, Dir, Covers) is det.
+%!  cover(Goal, Name, Covers) is det.
 %!  cover(Goal, Covers) is det.
 
 cover(Covers) :-
-    absolute_file_name(pack(.), Dir),
-    cover(run_tests, Dir, Covers).
+    cover(run_tests, pack(.), Covers).
 
-cover(Goal, Dir, Covers) :-
+cover(Goal, Name, Covers) :-
     cover(Goal, Covers0),
-    convlist(cover_subdir(Dir), Covers0, Covers).
+    convlist(cover_subdir(Name), Covers0, Covers).
 
-cover_subdir(Dir, File-Cover, Rel-Cover) :- subdir(Dir, File, Rel).
+cover_subdir(Name, File-Cover, Rel-Cover) :-
+    expand_file_search_path(Name, Dir),
+    subdir(Dir, File, Rel),
+    !.
 
 cover(Goal, Covers) :- show_coverage(covered(Goal, Covers)).
 
@@ -119,5 +121,4 @@ clean(Clauses, Length) :-
 
 subdir(Dir, File, Rel) :-
     relative_file_name(File, Dir, Rel),
-    print_message(informational, debug(Dir, File, Rel)),
     \+ sub_atom(Rel, 0, _, _, (..)).
