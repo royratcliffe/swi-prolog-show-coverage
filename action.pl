@@ -28,12 +28,15 @@ main :-
     format('Clauses not covered:~t~d~40|~n', [SumNotCovered]),
     format('Failed clauses in files:~t~d~40|~n', [SumFailedInFile]),
     format('Number of files:~t~d~40|~n', [Count]),
-    NotCoveredPercent is 100 * SumNotCovered / SumInFile,
-    FailedInFilePercent is 100 * SumFailedInFile / SumInFile,
-    CoveredPercent is 100 - NotCoveredPercent,
-    format('Not covered:~t~f~40|%~n', [NotCoveredPercent]),
-    format('Failed in file:~t~f~40|%~n', [FailedInFilePercent]),
-    format('Covered:~t~f~40|%~n', [CoveredPercent]).
+    (   SumInFile > 0
+    ->  NotCoveredPercent is 100 * SumNotCovered / SumInFile,
+        FailedInFilePercent is 100 * SumFailedInFile / SumInFile,
+        CoveredPercent is 100 - NotCoveredPercent,
+        format('Not covered:~t~f~40|%~n', [NotCoveredPercent]),
+        format('Failed in file:~t~f~40|%~n', [FailedInFilePercent]),
+        format('Covered:~t~f~40|%~n', [CoveredPercent])
+    ;   true
+    ).
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
